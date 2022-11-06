@@ -38,7 +38,7 @@ def get_image_id (region_name):
     ec2 = boto3.resource('ec2', region_name=region_name)
     filters = [
         {'Name': 'owner-id', 'Values': ['137112412989']}, 
-        {'Name':'description', 'Values':['Amazon Linux 2 AMI 2.0.20200917.0 x86_64 HVM gp2']}
+        {'Name':'description', 'Values':['Amazon Linux 2 Kernel 5.10 AMI 2.0.20221004.0 x86_64 HVM gp2']}
     ]
     images = ec2.images.filter(Filters=filters).all()
 
@@ -121,7 +121,7 @@ def launch_app(host_id, key_name, github_repo):
 
     client.load_system_host_keys()
     client.connect(hostname=host_id, username="ec2-user", key_filename='./key/'+key_name+'.pem')
-    stdin, stdout, stderr = client.exec_command('sudo yum install git -y && git clone '+github_repo+' && sudo bash ~python-automation/aws-flask-app/shell.sh')
+    stdin, stdout, stderr = client.exec_command('sudo yum install git -y && git clone '+github_repo+' && sudo bash ~/python-automation/aws-flask-app/shell.sh')
     print (stdout.readlines())
     time.sleep(3)
     stdin, stdout, stderr = client.exec_command('sudo python ~/python-automation/aws-flask-app/app.py &')
